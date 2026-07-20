@@ -94,8 +94,9 @@ All project documentation will be written in **English**.
 The Ozu Bible defines the product vision and direction only. Technical implementation belongs in dedicated technical documents.
 
 ---
+---
 
-# DOCS-004
+
 
 **Status:** 🔒 Locked
 
@@ -177,3 +178,82 @@ v0.2.0 → Project Design
 v0.5.0 → MVP Development
 
 v0.9.0 → Beta Release
+```
+---
+
+# DOCS-005
+
+**Status:** 🔒 Locked
+
+**Title:** Primary Target Audience
+
+**Decision:**
+
+The primary target audience of Ozu is **Turkish manga readers**.
+
+While future multilingual support may be introduced, the platform will always be designed with the Turkish manga community as its primary audience.
+
+**Reason:**
+
+Ozu is built to provide the best possible reading experience for Turkish manga readers, and all product decisions should prioritize their needs.
+
+---
+
+# DOCS-006
+
+**Status:** 🔒 Locked
+
+**Title:** Permanent Out of Scope Features
+
+**Decision:**
+
+The following features are permanently out of scope for Ozu:
+
+- Marketplace
+- NFT
+- Cryptocurrency
+- Blockchain integrations
+- Web3-related features
+
+**Reason:**
+
+These features do not align with Ozu's vision, target audience, or product goals. The project will remain focused on delivering the best possible manga reading experience.
+
+---
+
+# PHIL-001
+
+**Status:** 🔒 Locked
+
+**Title:** User Experience Over Numbers
+
+**Decision:**
+
+Ozu measures its success by the quality of the experience it provides, not by the number of users.
+
+Whether the platform serves one user or one thousand users, every visitor should leave with the feeling that their time on Ozu was worthwhile.
+
+**Reason:**
+
+The project's primary goal is to build the best possible experience for Turkish manga readers, not to maximize traffic at the expense of quality.
+
+
+---
+
+# DOCS-007
+
+**Status:** 🔒 Locked
+
+**Title:** Ozu Bible v1
+
+**Decision:**
+
+The first version of the Ozu Bible has been completed, reviewed, and approved.
+
+The document serves as the primary reference for the project's vision, mission, principles, goals, scope, target audience, success criteria, release strategy, naming conventions, and references.
+
+Future revisions must follow the project's documentation workflow.
+
+**Reason:**
+
+The Ozu Bible establishes the project's identity and provides a stable foundation for all future development.
