@@ -605,3 +605,175 @@ Administrators have the authority to remove comments, uploaded images, and user 
 **Reason:**
 
 This ensures the platform remains safe, respectful, and compliant with community standards.
+
+
+
+---
+
+# DOCS-009
+
+**Status:** 🔒 Locked
+
+**Title:** User Flow Documentation Standard
+
+**Decision:**
+
+All User Flows within the PRD must follow a single, consistent documentation format.
+
+Each flow consists of:
+
+- Flow
+- Result
+
+Exceptions are documented only when a flow requires special handling.
+
+**Reason:**
+
+Using a consistent structure improves readability, simplifies maintenance, and ensures every user journey is documented in a clear and standardized manner throughout the project.
+
+
+
+#### 5.2.4 Manage Favorites
+
+##### Flow
+
+User opens the Manga Details page.
+
+↓
+
+User clicks the **Favorite** button.
+
+↓
+
+The manga is added to the user's Favorites.
+
+↓
+
+User can remove the manga from Favorites at any time.
+
+##### Result
+
+The user's Favorites list is updated immediately.
+
+---
+
+#### 5.2.5 View Library
+
+##### Flow
+
+User opens their profile.
+
+↓
+
+User selects the **Library** tab.
+
+↓
+
+The platform displays all manga in the user's Library.
+
+↓
+
+User changes the sorting order if desired.
+
+##### Result
+
+The user can browse their reading history and completed series.
+
+---
+
+#### 5.2.6 View Another User's Profile
+
+##### Flow
+
+User opens another user's profile.
+
+↓
+
+The platform displays:
+
+- Profile picture
+- Username
+- Completion Badge
+- Public Library
+
+↓
+
+User browses the other user's Library.
+
+##### Result
+
+The user can explore another user's reading history.
+
+Private Favorites remain hidden.
+
+---
+
+#### 5.2.7 Write a Comment
+
+##### Flow
+
+User opens a Manga Details page or Chapter page.
+
+↓
+
+User writes a comment.
+
+↓
+
+If the comment contains spoilers, the user enables the spoiler tag.
+
+↓
+
+User submits the comment.
+
+↓
+
+The comment is published.
+
+##### Result
+
+The comment becomes visible to other users.
+
+---
+
+#### 5.2.8 Reply to a Comment
+
+##### Flow
+
+User selects **Reply**.
+
+↓
+
+The platform automatically mentions the target user's display name.
+
+↓
+
+User writes the reply.
+
+↓
+
+User submits the reply.
+
+##### Result
+
+The reply is added beneath the parent comment.
+
+---
+
+#### 5.2.9 Like a Comment
+
+##### Flow
+
+User clicks the **Like** button.
+
+↓
+
+The platform increases the comment's like count.
+
+↓
+
+The comment position is updated if necessary.
+
+##### Result
+
+The comment ranking reflects the updated number of likes.
