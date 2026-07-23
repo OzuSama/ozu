@@ -660,3 +660,103 @@ The database must consistently use:
 **Reason:**
 
 Following a single, well-established database standard ensures consistency, improves maintainability, reduces development mistakes, and provides long-term scalability for the platform.
+
+
+
+---
+
+# API-001
+
+**Status:** 🔒 Locked
+
+**Title:** REST API Standard
+
+**Decision:**
+
+The Ozu platform follows RESTful API principles.
+
+The API must:
+
+- Use `/api/v1` as the base path.
+- Use JSON for all request and response bodies.
+- Follow standard HTTP methods (`GET`, `POST`, `PATCH`, `DELETE`).
+- Return appropriate HTTP status codes.
+- Use plural resource names.
+- Maintain a consistent response structure across all endpoints.
+
+**Reason:**
+
+Following REST standards creates a predictable, maintainable, and scalable API while improving consistency between the backend, frontend, and future integrations.
+
+
+
+---
+
+# API-002
+
+**Status:** 🔒 Locked
+
+**Title:** API Versioning Strategy
+
+**Decision:**
+
+All public API endpoints must be versioned using the URL path.
+
+Current version:
+
+`/api/v1`
+
+Future breaking changes must be introduced through a new version (e.g. `/api/v2`) without modifying existing versions.
+
+**Reason:**
+
+Versioning ensures backward compatibility, allows safe API evolution, and prevents breaking existing clients during future development.
+
+
+
+---
+
+# API-003
+
+**Status:** 🔒 Locked
+
+**Title:** Endpoint Documentation Standard
+
+**Decision:**
+
+Every API endpoint documented in the API Bible must follow a consistent structure.
+
+Each endpoint includes:
+
+- Endpoint
+- Description
+- Authentication
+- Request (JSON example)
+- Success Response (JSON example)
+- Error Responses
+
+**Reason:**
+
+Using a consistent endpoint documentation format improves readability, accelerates frontend development, simplifies backend implementation, and serves as a reliable reference throughout the project's lifecycle.
+
+
+
+---
+
+# API-004
+
+**Status:** 🔒 Locked
+
+**Title:** Endpoint Response Strategy
+
+**Decision:**
+
+API endpoints should return all data required to render their corresponding frontend page whenever reasonably possible.
+
+Responses should be designed around frontend requirements rather than individual database tables.
+
+Unnecessary additional API requests should be avoided.
+
+**Reason:**
+
+Returning complete, page-oriented responses reduces network requests, improves perceived performance, simplifies frontend development, and establishes a clear and maintainable API contract between the frontend and backend.
