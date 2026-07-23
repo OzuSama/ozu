@@ -633,147 +633,30 @@ Using a consistent structure improves readability, simplifies maintenance, and e
 
 
 
-#### 5.2.4 Manage Favorites
-
-##### Flow
-
-User opens the Manga Details page.
-
-↓
-
-User clicks the **Favorite** button.
-
-↓
-
-The manga is added to the user's Favorites.
-
-↓
-
-User can remove the manga from Favorites at any time.
-
-##### Result
-
-The user's Favorites list is updated immediately.
-
 ---
 
-#### 5.2.5 View Library
+# DB-001
 
-##### Flow
+**Status:** 🔒 Locked
 
-User opens their profile.
+**Title:** Database Design Standards
 
-↓
+**Decision:**
 
-User selects the **Library** tab.
+The Ozu database follows modern PostgreSQL best practices by default.
 
-↓
+Project-specific requirements may override these standards only when a clear technical or business justification exists.
 
-The platform displays all manga in the user's Library.
+The database must consistently use:
 
-↓
+- snake_case naming
+- UUID primary keys
+- `id` as the primary key name
+- `<table>_id` for foreign keys
+- `created_at` and `updated_at` timestamps
+- `is_` prefix for boolean fields
+- Uppercase enum values
 
-User changes the sorting order if desired.
+**Reason:**
 
-##### Result
-
-The user can browse their reading history and completed series.
-
----
-
-#### 5.2.6 View Another User's Profile
-
-##### Flow
-
-User opens another user's profile.
-
-↓
-
-The platform displays:
-
-- Profile picture
-- Username
-- Completion Badge
-- Public Library
-
-↓
-
-User browses the other user's Library.
-
-##### Result
-
-The user can explore another user's reading history.
-
-Private Favorites remain hidden.
-
----
-
-#### 5.2.7 Write a Comment
-
-##### Flow
-
-User opens a Manga Details page or Chapter page.
-
-↓
-
-User writes a comment.
-
-↓
-
-If the comment contains spoilers, the user enables the spoiler tag.
-
-↓
-
-User submits the comment.
-
-↓
-
-The comment is published.
-
-##### Result
-
-The comment becomes visible to other users.
-
----
-
-#### 5.2.8 Reply to a Comment
-
-##### Flow
-
-User selects **Reply**.
-
-↓
-
-The platform automatically mentions the target user's display name.
-
-↓
-
-User writes the reply.
-
-↓
-
-User submits the reply.
-
-##### Result
-
-The reply is added beneath the parent comment.
-
----
-
-#### 5.2.9 Like a Comment
-
-##### Flow
-
-User clicks the **Like** button.
-
-↓
-
-The platform increases the comment's like count.
-
-↓
-
-The comment position is updated if necessary.
-
-##### Result
-
-The comment ranking reflects the updated number of likes.
+Following a single, well-established database standard ensures consistency, improves maintainability, reduces development mistakes, and provides long-term scalability for the platform.
