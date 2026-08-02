@@ -535,13 +535,12 @@ The Home page is currently intended to include the following sections:
 
 - Header
 - Hero Section
+- Continue Reading (Authenticated Users Only)
 - Featured Slider
 - Latest Updates
 - Manga of the Day
-- Announcements
 - Footer
 
-Additional sections may be introduced in future versions if they improve discoverability without increasing visual complexity.
 
 ---
 
@@ -567,15 +566,16 @@ Decorative elements should support the atmosphere of the interface rather than b
 
 #### Featured Slider
 
-The Featured Slider is intended to showcase a curated selection of manga.
+The Featured Slider displays only manually selected featured manga.
 
-The number of featured items, transition style, and navigation controls may evolve as the design system matures.
+Featured content is curated by administrators and is not generated automatically based on popularity, rating, or update activity.
 
-Whenever possible:
+The slider supports both automatic rotation and manual navigation.
 
-- Manual navigation should remain intuitive.
-- Automatic transitions should never interfere with user interaction.
-- Navigation indicators should clearly communicate the current position.
+User interaction always has priority:
+- Automatic rotation pauses while the user is interacting.
+- Manual navigation immediately overrides automatic rotation.
+- Navigation indicators clearly communicate the current position.
 
 ---
 
