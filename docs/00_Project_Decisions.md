@@ -123,6 +123,7 @@ Keeps all permanent decisions centralized and easy to reference.
 **Decision:**
 
 - Next.js
+- NestJS
 - React
 - TypeScript
 - PostgreSQL
