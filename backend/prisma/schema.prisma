@@ -57,7 +57,7 @@ model Profile {
   avatarUrl            String?  @map("avatar_url") @db.Text
   profileBackgroundUrl String?  @map("profile_background_url") @db.Text
   commentBackgroundUrl String?  @map("comment_background_url") @db.Text
-  completionBadge      Int      @default(0) @map("completion_badge")
+  completedMangaCount  Int      @default(0) @map("completed_manga_count")
   createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
