@@ -1,13 +1,309 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MangaStatus {
+  ONGOING
+  COMPLETED
+  HIATUS
+  CANCELLED
+}
+
+enum MangaType {
+  MANGA
+  MANHWA
+  MANHUA
+  ONE_SHOT
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  REJECTED
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  username     String   @unique @db.VarChar(50)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  isAdmin      Boolean  @default(false) @map("is_admin")
+  isVerified   Boolean  @default(false) @map("is_verified")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  profile         Profile?
+  favorites       Favorite[]
+  library         Library[]
+  comments        Comment[]
+  commentLikes    CommentLike[]
+  reports         Report[]       @relation("UserReports")
+  reviewedReports Report[]       @relation("ReviewedReports")
+  activityLogs    ActivityLog[]
+  announcements   Announcement[]
+
+  @@map("users")
+}
+
+model Profile {
+  id                   String   @id @default(uuid()) @db.Uuid
+  userId               String   @unique @map("user_id") @db.Uuid
+  displayName          String   @map("display_name") @db.VarChar(100)
+  avatarUrl            String?  @map("avatar_url") @db.Text
+  profileBackgroundUrl String?  @map("profile_background_url") @db.Text
+  commentBackgroundUrl String?  @map("comment_background_url") @db.Text
+  completionBadge      Int      @default(0) @map("completion_badge")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Manga {
+  id        String      @id @default(uuid()) @db.Uuid
+  title     String      @db.VarChar(255)
+  slug      String      @unique @db.VarChar(255)
+  coverUrl  String      @map("cover_url") @db.Text
+  synopsis  String      @db.Text
+  status    MangaStatus @default(ONGOING)
+  type      MangaType   @default(MANGA)
+  viewCount Int         @default(0) @map("view_count")
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  titles    MangaTitle[]
+  chapters  Chapter[]
+  genres    MangaGenre[]
+  tags      MangaTag[]
+  favorites Favorite[]
+  library   Library[]
+  comments  Comment[]
+
+  @@index([title])
+  @@index([status, type])
+  @@map("manga")
+}
+
+model MangaTitle {
+  id        String   @id @default(uuid()) @db.Uuid
+  mangaId   String   @map("manga_id") @db.Uuid
+  title     String   @db.VarChar(255)
+  language  String   @db.VarChar(10)
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+
+  @@unique([mangaId, title, language])
+  @@index([title])
+  @@index([mangaId, isPrimary])
+  @@map("manga_titles")
+}
+
+model Chapter {
+  id            String   @id @default(uuid()) @db.Uuid
+  mangaId       String   @map("manga_id") @db.Uuid
+  chapterNumber Decimal  @map("chapter_number") @db.Decimal(10, 2)
+  title         String?  @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  manga      Manga         @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  pages      ChapterPage[]
+  lastReadIn Library[]     @relation("LastReadChapter")
+
+  @@unique([mangaId, chapterNumber])
+  @@map("chapters")
+}
+
+model ChapterPage {
+  id         String   @id @default(uuid()) @db.Uuid
+  chapterId  String   @map("chapter_id") @db.Uuid
+  pageNumber Int      @map("page_number")
+  imageUrl   String   @map("image_url") @db.Text
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([chapterId, pageNumber])
+  @@map("chapter_pages")
+}
+
+model Genre {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(100)
+  slug      String   @unique @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  mangas MangaGenre[]
+
+  @@map("genres")
+}
+
+model Tag {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(100)
+  slug      String   @unique @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  mangas MangaTag[]
+
+  @@map("tags")
+}
+
+model MangaGenre {
+  mangaId   String   @map("manga_id") @db.Uuid
+  genreId   String   @map("genre_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([mangaId, genreId])
+  @@index([genreId])
+  @@map("manga_genres")
+}
+
+model MangaTag {
+  mangaId   String   @map("manga_id") @db.Uuid
+  tagId     String   @map("tag_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([mangaId, tagId])
+  @@index([tagId])
+  @@map("manga_tags")
+}
+
+model Favorite {
+  userId    String   @map("user_id") @db.Uuid
+  mangaId   String   @map("manga_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+
+  @@id([userId, mangaId])
+  @@index([mangaId])
+  @@map("favorites")
+}
+
+model Library {
+  userId            String   @map("user_id") @db.Uuid
+  mangaId           String   @map("manga_id") @db.Uuid
+  lastReadChapterId String?  @map("last_read_chapter_id") @db.Uuid
+  isCompleted       Boolean  @default(false) @map("is_completed")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga           Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  lastReadChapter Chapter? @relation("LastReadChapter", fields: [lastReadChapterId], references: [id], onDelete: SetNull)
+
+  @@id([userId, mangaId])
+  @@index([mangaId])
+  @@index([userId, isCompleted])
+  @@index([lastReadChapterId])
+  @@map("library")
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  mangaId   String   @map("manga_id") @db.Uuid
+  parentId  String?  @map("parent_id") @db.Uuid
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga   Manga         @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  parent  Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[]     @relation("CommentReplies")
+  likes   CommentLike[]
+  reports Report[]
+
+  @@index([mangaId, createdAt])
+  @@index([userId])
+  @@index([parentId])
+  @@map("comments")
+}
+
+model CommentLike {
+  userId    String   @map("user_id") @db.Uuid
+  commentId String   @map("comment_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@id([userId, commentId])
+  @@index([commentId])
+  @@map("comment_likes")
+}
+
+model Report {
+  id           String       @id @default(uuid()) @db.Uuid
+  userId       String       @map("user_id") @db.Uuid
+  commentId    String       @map("comment_id") @db.Uuid
+  reason       String       @db.Text
+  status       ReportStatus @default(PENDING)
+  reviewedById String?      @map("reviewed_by_id") @db.Uuid
+  reviewedAt   DateTime?    @map("reviewed_at") @db.Timestamptz(6)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user       User    @relation("UserReports", fields: [userId], references: [id], onDelete: Cascade)
+  comment    Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  reviewedBy User?   @relation("ReviewedReports", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([commentId])
+  @@index([userId])
+  @@index([status, createdAt])
+  @@index([reviewedById])
+  @@map("reports")
+}
+
+model Announcement {
+  id          String    @id @default(uuid()) @db.Uuid
+  createdById String    @map("created_by_id") @db.Uuid
+  title       String    @db.VarChar(255)
+  content     String    @db.Text
+  isPublished Boolean   @default(false) @map("is_published")
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([isPublished, publishedAt])
+  @@index([createdById])
+  @@map("announcements")
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  action    String   @db.VarChar(100)
+  metadata  Json?    @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+  @@map("activity_logs")
 }

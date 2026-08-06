@@ -317,8 +317,7 @@ Stores public profile information and personalization settings for each user.
 | display_name | VARCHAR | NOT NULL | Public display name |
 | avatar_url | TEXT | NULL | Profile picture |
 | profile_background_url | TEXT | NULL | Private profile background |
-| comment_background_url | TEXT | NULL | Background displayed behind comments |
-| completion_badge | INTEGER | NOT NULL, DEFAULT 0 | Number of completed manga |
+| completed_manga_count | INTEGER | NOT NULL, DEFAULT 0 | Number of completed manga |
 | created_at | TIMESTAMP | NOT NULL | Profile creation date |
 | updated_at | TIMESTAMP | NOT NULL | Last update date |
 
